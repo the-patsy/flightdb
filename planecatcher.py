@@ -8,23 +8,21 @@ def convert_dmy_to_unix(d, m, y):
     date_time = datetime.datetime(int(y), int(m), int(d), 0, 0)
     return (time.mktime(date_time.timetuple()))
 
-def create_db():
-    #TODO
+#def add_db_data():
+
 
 # Establish connection to DB
-conn = psycopg2.connect(
-        database='postgres'
-        user='postgres'
-        password='password'
-        host='localhost'
-        port='1337'
+conn = psycopg2.connect(database='postgres', user='patsy', password='password', host='127.0.0.1', port='5432'
 )
-
 conn.autocommit = True
 
 # Create cursor object
 cursor = conn.cursor()
 
+# Test create
+sql = '''CREATE database Flight_database''';
+cursor.execute(sql)
+conn.close()
 # Create api variable
 api = OpenSkyApi()
 
@@ -51,7 +49,4 @@ input_end_day = 2
 startdate = convert_dmy_to_unix(input_start_day, input_start_month, input_start_year)
 enddate = convert_dmy_to_unix(input_end_day, input_end_month, input_end_year)
 
-# TODO Check if DB exists
-
-# Create non-existent db
-create_db()
+#create_db()
