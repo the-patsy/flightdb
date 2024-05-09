@@ -9,6 +9,24 @@ conn.autocommit = True
 cursor = conn.cursor()
 
 # Test create
-sql = '''CREATE database flight_database''';
-cursor.execute(sql)
+#sql = '''CREATE database flight_database''';
+#cursor.execute(sql)
+
+commands = (
+    """
+    CREATE TABLE flights (
+        arrivalAirportCandidatesCount INTEGER,
+        callsign VARCHAR,
+        departureAirportCandidatesCount INTEGER,
+        estArrivalAirport VARCHAR,
+        estArrivalAirportHorizDistance VARCHAR,
+        estArrivalAirportVertDistance VARCHAR,
+        estDepartureAirport VARCHAR,
+        estDepartureAirportHorizDistance VARCHAR,
+        estDepartureAirportVertDistance VARCHAR,
+        firstSeen INTEGER,
+        icao24  VARCHAR PRIMARY KEY,
+        lastSeen INTEGER)
+        """)
+cursor.execute(commands)
 conn.close()
