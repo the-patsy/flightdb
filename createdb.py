@@ -1,7 +1,7 @@
 import psycopg2 
 
 # Establish connection to DB
-conn = psycopg2.connect(database='postgres', user='patsy', password='password', host='127.0.0.1', port='5432'
+conn = psycopg2.connect(database='flight_database', user='patsy', password='password', host='127.0.0.1', port='5432'
 )
 conn.autocommit = True
 
@@ -15,18 +15,18 @@ cursor = conn.cursor()
 commands = (
     """
     CREATE TABLE flights (
-        arrivalAirportCandidatesCount INTEGER,
+        arrivalAirportCandidatesCount VARCHAR,
         callsign VARCHAR,
-        departureAirportCandidatesCount INTEGER,
+        departureAirportCandidatesCount VARCHAR,
         estArrivalAirport VARCHAR,
         estArrivalAirportHorizDistance VARCHAR,
         estArrivalAirportVertDistance VARCHAR,
         estDepartureAirport VARCHAR,
         estDepartureAirportHorizDistance VARCHAR,
         estDepartureAirportVertDistance VARCHAR,
-        firstSeen INTEGER,
+        firstSeen VARCHAR,
         icao24  VARCHAR PRIMARY KEY,
-        lastSeen INTEGER)
+        lastSeen VARCHAR)
         """)
 cursor.execute(commands)
 conn.close()

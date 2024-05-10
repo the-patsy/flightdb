@@ -8,22 +8,23 @@ def convert_dmy_to_unix(d, m, y, h, minute):
     date_time = datetime.datetime(int(y), int(m), int(d), int(h), int(minute))
     return (time.mktime(date_time.timetuple()))
 
-# TODO Add to function a way to parse the flight data into postgres
+#TODO figure out why icao24 occassionally has duplicates from a single pull, maybe invent new primary key as default incremental value if possible?
+def add_db_data(flight):
 
-def add_db_data():
-    # Establish connection to DB
-    conn = psycopg2.connect(
-            database='postgres',
-            user='patsy',
-            password='password',
-            host='127.0.0.1',
-            port='5432'
-    )
-
-    conn.autocommit = True
-
-    # Create cursor object
-    cursor = conn.cursor()
+    # Create data
+    data = (flight.arrivalAirportCandidatesCount,
+            flight.callsign,
+            flight.departureAirportCandidatesCount,
+            flight.estArrivalAirport,
+            flight.estArrivalAirportHorizDistance,
+            flight.estArrivalAirportVertDistance,
+            flight.estDepartureAirport,
+            flight.estDepartureAirportHorizDistance,
+            flight.estDepartureAirportVertDistance,
+            flight.firstSeen,
+            flight.icao24,
+            flight.lastSeen)
+    cursor.execute("INSERT into flights(arrivalairportcandidatescount, callsign, departureAirportCandidatesCount, estArrivalAirport, estArrivalAirportHorizDistance, estArrivalAirportVertDistance, estDepartureAirport, estDepartureAirportHorizDistance, estDepartureAirportVertDistance, firstSeen, icao24, lastSeen) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);", data)
 
 # Gather timeframe for DB entry
 
@@ -49,11 +50,21 @@ enddate = 1517230800
 
 # Test API
 
+# Establish connection to DB
+conn = psycopg2.connect(
+        database='flight_database',
+        user='patsy',
+        password='password',
+        host='127.0.0.1',
+        port='5432')
+
+conn.autocommit = True
+
+# Create cursor object
+cursor = conn.cursor()
+
 api = OpenSkyApi()
 data = api.get_flights_from_interval(startdate, enddate)
-"""
+
 for flight in data:
-    print(flight)
-    confimline = input('NEXT')
-"""
-#add_db_data()
+    add_db_data(flight)
